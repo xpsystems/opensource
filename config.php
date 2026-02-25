@@ -7,6 +7,8 @@ $site_config = [
     'site_description' => 'Everything we build, in the open. Explore our repositories, tools, and infrastructure projects at xpsystems.',
     'version'          => 'v1.0.0',
     'current_year'     => date('Y'),
+    // Link to this site's own source repo
+    'project_github'   => 'https://github.com/xpsystems/opensource',
 ];
 
 $nav_links = [
@@ -16,25 +18,23 @@ $nav_links = [
     ['label' => 'Domains',     'url' => 'https://domains.xpsystems.eu'],
 ];
 
-$footer_links = [
-    ['label' => 'Impressum', 'url' => 'https://xpsystems.eu/impressum'],
-    ['label' => 'Privacy',   'url' => 'https://xpsystems.eu/privacy'],
-];
-
-$github_orgs = [
+// GitHub sources fed into the org-cards section and repo table.
+// type "org"  → backend calls /orgs/{handle}/repos
+// type "user" → backend calls /users/{handle}/repos
+$github_sources = [
     [
         'handle'      => 'xpsystems',
+        'type'        => 'org',
         'label'       => 'xpsystems',
         'description' => 'Core infrastructure, tools, and services.',
         'url'         => 'https://github.com/xpsystems',
-        'color'       => 'accent',
     ],
     [
         'handle'      => 'xpsystems-ai',
+        'type'        => 'user',
         'label'       => 'xpsystems-ai',
         'description' => 'AI-assisted tooling and automation projects.',
         'url'         => 'https://github.com/xpsystems-ai',
-        'color'       => 'purple',
     ],
 ];
 
@@ -50,4 +50,3 @@ $team_members = [
         'role'   => 'Co-Founder',
     ],
 ];
-?>

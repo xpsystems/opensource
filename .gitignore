@@ -1,1 +1,8 @@
 .DS_Store
+secrets.php
+
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo

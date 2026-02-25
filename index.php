@@ -42,7 +42,7 @@
                     github.com/xpsystems
                 </a>
                 <a href="#repos" class="btn btn-ghost">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                     Browse Repos
                 </a>
             </div>
@@ -82,28 +82,30 @@
     <section class="oss-section org-section" style="background:var(--bg-alt)">
         <div class="container">
             <div class="section-header reveal">
-                <h2 class="section-title">Our Organizations</h2>
-                <p class="section-sub">We maintain two GitHub organizations, each with a distinct focus.</p>
+                <h2 class="section-title">Our GitHub Accounts</h2>
+                <p class="section-sub">We maintain one organization and one user account on GitHub, each with a distinct focus.</p>
             </div>
 
             <div class="org-grid">
-                <?php foreach ($github_orgs as $org): ?>
-                <a href="<?= htmlspecialchars($org['url']) ?>" target="_blank" rel="noopener"
-                   class="org-card reveal" data-org="<?= htmlspecialchars($org['handle']) ?>">
+                <?php foreach ($github_sources as $src): ?>
+                <a href="<?= htmlspecialchars($src['url']) ?>" target="_blank" rel="noopener"
+                   class="org-card reveal" data-handle="<?= htmlspecialchars($src['handle']) ?>">
                     <div class="org-card-top">
-                        <div class="org-avatar" id="avatar-<?= htmlspecialchars($org['handle']) ?>">
-                            <!-- Avatar injected by JS -->
+                        <div class="org-avatar" id="avatar-<?= htmlspecialchars($src['handle']) ?>">
                             <div class="org-avatar-placeholder">
                                 <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
                             </div>
                         </div>
                         <div class="org-info">
-                            <h3 class="org-name mono">@<?= htmlspecialchars($org['handle']) ?></h3>
-                            <p class="org-desc"><?= htmlspecialchars($org['description']) ?></p>
+                            <div class="org-name-row">
+                                <h3 class="org-name mono">@<?= htmlspecialchars($src['handle']) ?></h3>
+                                <span class="org-type-badge"><?= $src['type'] === 'org' ? 'org' : 'user' ?></span>
+                            </div>
+                            <p class="org-desc"><?= htmlspecialchars($src['description']) ?></p>
                         </div>
                     </div>
                     <div class="org-card-stats">
-                        <span class="org-stat" id="org-repos-<?= htmlspecialchars($org['handle']) ?>">
+                        <span class="org-stat" id="org-repos-<?= htmlspecialchars($src['handle']) ?>">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
                             <span class="org-stat-num">…</span> repos
                         </span>
@@ -129,7 +131,7 @@
         <div class="container">
             <div class="section-header reveal">
                 <h2 class="section-title">Repositories</h2>
-                <p class="section-sub">All public repositories across our GitHub organizations, fetched live.</p>
+                <p class="section-sub">All public repositories across our GitHub accounts, fetched live.</p>
             </div>
 
             <!-- Controls -->
@@ -140,8 +142,9 @@
                 </div>
                 <div class="repo-filters">
                     <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="xpsystems">xpsystems</button>
-                    <button class="filter-btn" data-filter="xpsystems-ai">xpsystems-ai</button>
+                    <?php foreach ($github_sources as $src): ?>
+                    <button class="filter-btn" data-filter="<?= htmlspecialchars($src['handle']) ?>"><?= htmlspecialchars($src['label']) ?></button>
+                    <?php endforeach; ?>
                 </div>
             </div>
 
@@ -154,7 +157,7 @@
                                 Repository
                                 <svg class="sort-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
                             </th>
-                            <th class="col-org">Org</th>
+                            <th class="col-org">Account</th>
                             <th class="col-lang">Language</th>
                             <th class="col-stars sortable" data-col="stars">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -179,7 +182,7 @@
                             <td colspan="7">
                                 <div class="repo-loading">
                                     <div class="loading-spinner"></div>
-                                    <span>Fetching repositories from GitHub…</span>
+                                    <span>Fetching repositories…</span>
                                 </div>
                             </td>
                         </tr>
@@ -212,9 +215,9 @@
                 <?php foreach ($team_members as $member): ?>
                 <div class="team-card reveal" data-github="<?= htmlspecialchars($member['github']) ?>">
                     <div class="team-avatar-wrap">
-                        <img class="team-avatar" src="" alt="<?= htmlspecialchars($member['name']) ?>"
-                             data-src="https://avatars.githubusercontent.com/<?= htmlspecialchars($member['github']) ?>?s=160">
-                        <div class="team-avatar-skeleton"></div>
+                        <img class="team-avatar"
+                             src="https://avatars.githubusercontent.com/<?= htmlspecialchars($member['github']) ?>?s=320"
+                             alt="<?= htmlspecialchars($member['name']) ?>">
                     </div>
                     <div class="team-info">
                         <h3 class="team-name"><?= htmlspecialchars($member['name']) ?></h3>
@@ -240,7 +243,6 @@
         </div>
     </section>
 
-    <!-- Divider: Content -> Footer -->
     <div class="section-divider">
         <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
             <path d="M0,0 L1200,80 L1200,120 L0,120 Z" class="divider-fill-footer"></path>
